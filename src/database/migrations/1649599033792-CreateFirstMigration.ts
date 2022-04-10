@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateFirstMigration1649565675925 implements MigrationInterface {
-  name = 'CreateFirstMigration1649565675925';
+export class CreateFirstMigration1649599033792 implements MigrationInterface {
+  name = 'CreateFirstMigration1649599033792';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,7 +11,10 @@ export class CreateFirstMigration1649565675925 implements MigrationInterface {
       `CREATE TYPE "public"."users_hability_enum" AS ENUM('amateur', 'beginner', 'semiprofissional', 'professional', 'legendary')`
     );
     await queryRunner.query(
-      `CREATE TABLE "users" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, "email" character varying NOT NULL, "hability" "public"."users_hability_enum" NOT NULL DEFAULT 'semiprofissional', "password" character varying NOT NULL, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`
+      `CREATE TYPE "public"."users_position_enum" AS ENUM('goalkeeper', 'attacker', 'half', 'defender')`
+    );
+    await queryRunner.query(
+      `CREATE TABLE "users" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, "email" character varying NOT NULL, "hability" "public"."users_hability_enum" NOT NULL DEFAULT 'semiprofissional', "position" "public"."users_position_enum" NOT NULL DEFAULT 'defender', "password" character varying NOT NULL, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "teams_users" ("team_id" integer NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "PK_7ef73da7c71c3028ec52cd3681d" PRIMARY KEY ("team_id", "user_id"))`
@@ -45,6 +48,7 @@ export class CreateFirstMigration1649565675925 implements MigrationInterface {
     );
     await queryRunner.query(`DROP TABLE "teams_users"`);
     await queryRunner.query(`DROP TABLE "users"`);
+    await queryRunner.query(`DROP TYPE "public"."users_position_enum"`);
     await queryRunner.query(`DROP TYPE "public"."users_hability_enum"`);
     await queryRunner.query(`DROP TABLE "teams"`);
   }

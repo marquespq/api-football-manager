@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
-import User, { Hability } from '../database/entities/User.Entity';
+import User, { Hability, Position } from '../database/entities/User.Entity';
 import { getUserById } from '../services/auth.service';
 import ApiError from '../utils/apiError.utils';
 
@@ -44,6 +44,7 @@ interface InfoTeam {
   id?: number;
   name?: string;
   hability?: Hability;
+  position?: Position;
   email?: string;
   users?: User[];
   description?: string;
@@ -74,6 +75,7 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
       id: player.id,
       name: player.name,
       hability: player.hability,
+      position: player.position,
       email: player.email,
     }));
 

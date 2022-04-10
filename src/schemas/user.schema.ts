@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { Hability } from '../database/entities/User.Entity';
+import { Hability, Position } from '../database/entities/User.Entity';
 
 export const schema = yup.object({
   name: yup.string().defined('Name is required'),
@@ -10,6 +10,12 @@ export const schema = yup.object({
     .oneOf(
       Object.values(Hability),
       `Nivel deve ser: ${Object.values(Hability).join(' ou ')}.`
+    ),
+  position: yup
+    .mixed<Position>()
+    .oneOf(
+      Object.values(Position),
+      `Posição deve ser: ${Object.values(Position).join(' ou ')}.`
     ),
 });
 

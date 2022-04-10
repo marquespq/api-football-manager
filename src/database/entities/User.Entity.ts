@@ -10,6 +10,13 @@ export enum Hability {
   LEGENDARY = 'legendary',
 }
 
+export enum Position {
+  GK = 'goalkeeper',
+  CA = 'attacker',
+  ME = 'half',
+  DEFENDER = 'defender',
+}
+
 @Entity('users')
 export default class User extends Base {
   @Column()
@@ -24,6 +31,13 @@ export default class User extends Base {
     default: Hability.SEMI_PROFESSIONAL,
   })
   hability: Hability;
+
+  @Column({
+    type: 'enum',
+    enum: Position,
+    default: Position.DEFENDER,
+  })
+  position: Position;
 
   @Column()
   password: string;
