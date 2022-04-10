@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { CreateUserSchema } from '../schemas/user.schema';
-import { createUser } from '../services/user.service';
+import { createUser, updateUser } from '../services/user.service';
 import ApiReturnError from '../utils/apiReturnError';
 import ApiReturnSuccess from '../utils/apiReturnSuccess';
 
@@ -22,4 +22,18 @@ export async function createHandler(
 export async function getCurrentUser(request: Request, response: Response) {
   const { user } = request;
   response.status(StatusCodes.OK).json(new ApiReturnSuccess(user));
+}
+
+export async function updateHandler(request: Request, response: Response) {
+  try {
+    const { id } = request.params;
+
+    await updateUser(Number(id), request.body);
+
+    response.status(StatusCodes.OK).json(new ApiReturnSuccess());
+  } catch (err) {
+    response
+      .status(StatusCodes.BAD_REQUEST)
+      .json(new ApiReturnError({ message: (err as Error).message }));
+  }
 }
