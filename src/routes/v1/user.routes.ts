@@ -16,12 +16,14 @@ const routes = Router();
 routes
   // PUBLIC
   .route('/')
-  .post(validateResource(createUserSchema), createHandler)
+  .post(validateResource(createUserSchema), catchAsync(createHandler))
 
   // PRIVATE
   .get(catchAsync(auth), catchAsync(getCurrentUser));
 
 // PUBLIC
-routes.route('/:id').put(validateResource(updateUserSchema), updateHandler);
+routes
+  .route('/:id')
+  .put(validateResource(updateUserSchema), catchAsync(updateHandler));
 
 export default routes;

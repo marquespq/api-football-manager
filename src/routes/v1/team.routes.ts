@@ -17,11 +17,19 @@ const routes = Router();
 
 routes
   .route('/')
-  .post(catchAsync(auth), validateResource(createTeamSchema), createHandler);
+  .post(
+    catchAsync(auth),
+    validateResource(createTeamSchema),
+    catchAsync(createHandler)
+  );
 
 routes
   .route('/:id')
-  .put(catchAsync(auth), validateResource(updateTeamSchema), updateHandler)
+  .put(
+    catchAsync(auth),
+    validateResource(updateTeamSchema),
+    catchAsync(updateHandler)
+  )
   .delete(
     catchAsync(auth),
     validateResource(deleteTeamSchema),
