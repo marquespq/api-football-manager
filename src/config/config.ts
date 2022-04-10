@@ -1,8 +1,5 @@
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import * as yup from 'yup';
-import path from 'path';
-
-dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 export const environments = {
   PRODUCTION: 'production',
@@ -22,17 +19,12 @@ const envVarsSchema = yup
       .default(environments.DEVELOPMENT),
     API_PORT: yup.number().default(3001),
     PUBLIC_URL: yup.string().default('localhost'),
-    JWT_SECRET: yup.string().required('Secret is required'),
-    GOOGLE_APPLICATION_CREDENTIALS: yup.string(),
-    GOOGLE_MAP_API_KEY: yup.string(),
-    MIXPANEL_TOKEN: yup.string(),
-    PAGARME_API_KEY: yup.string(),
-    PAGARME_CRIPTO_KEY: yup.string(),
     POSTGRES_HOST: yup.string().required('POSTGRES_HOST is required'),
     POSTGRES_PORT: yup.number().default(5432),
     POSTGRES_USER: yup.string().required('POSTGRES_USER is required'),
     POSTGRES_PASSWORD: yup.string().required('POSTGRES_PASSWORD is required'),
     POSTGRES_DB: yup.string().required('POSTGRES_DB is required'),
+    JWT_KEY: yup.string().required('JWT_KEY is required'),
   })
   .noUnknown();
 
@@ -57,10 +49,6 @@ const config = {
     database: envVars.POSTGRES_DB,
   },
   jwtKey: envVars.JWT_KEY,
-  vindi: {
-    key: envVars.VINDI_KEY,
-    url: envVars.VINDI_URL,
-  },
 };
 
 export default config;
