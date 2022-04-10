@@ -56,7 +56,7 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
   try {
     user = await getUserById(isValid.sub);
   } catch (error) {
-    throw new ApiError(StatusCodes.NOT_FOUND, 'Usuario não existe não existe.');
+    throw new ApiError(StatusCodes.NOT_FOUND, 'Usuario não existe.');
   }
 
   const filterUser = {

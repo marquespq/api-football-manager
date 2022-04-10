@@ -26,12 +26,12 @@ export async function login(
   return { token };
 }
 
-export async function getUserById(id: number) {
+export async function getUserById(id: string) {
   const repository = getCustomRepository(UserRepository);
-  const user = await repository.findOne(Number(id));
+  const user = await repository.findOne(id);
 
   if (!user) {
-    throw new ApiError(StatusCodes.NOT_FOUND, 'Usuario não existe não existe.');
+    throw new ApiError(StatusCodes.NOT_FOUND, 'Usuario não existe.');
   }
 
   return user;
