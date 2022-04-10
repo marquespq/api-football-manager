@@ -6,10 +6,20 @@ import User, { Hability, Position } from '../database/entities/User.Entity';
 import { getUserById } from '../services/auth.service';
 import ApiError from '../utils/apiError.utils';
 
+interface InfoTeam {
+  id?: number;
+  name?: string;
+  hability?: Hability;
+  position?: Position;
+  email?: string;
+  users?: User[];
+  description?: string;
+}
+
 declare global {
   namespace Express {
     interface Request {
-      user: any;
+      user: InfoTeam;
     }
   }
 }
@@ -38,16 +48,6 @@ async function isTokenValid(token: string): Promise<any> {
   } catch (error) {
     return false;
   }
-}
-
-interface InfoTeam {
-  id?: number;
-  name?: string;
-  hability?: Hability;
-  position?: Position;
-  email?: string;
-  users?: User[];
-  description?: string;
 }
 
 export async function auth(req: Request, _res: Response, next: NextFunction) {
