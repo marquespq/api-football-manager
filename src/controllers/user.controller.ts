@@ -18,3 +18,8 @@ export async function createHandler(
       .json(new ApiReturnError({ message: (err as Error).message }));
   }
 }
+
+export async function getCurrentUser(request: Request, response: Response) {
+  const { user } = request;
+  response.status(StatusCodes.OK).json(new ApiReturnSuccess(user));
+}

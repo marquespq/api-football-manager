@@ -28,7 +28,10 @@ export async function login(
 
 export async function getUserById(id: string) {
   const repository = getCustomRepository(UserRepository);
-  const user = await repository.findOne(id);
+  const user = await repository.findOne({
+    where: { id },
+    relations: ['teams'],
+  });
 
   if (!user) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Usuario não existe.');

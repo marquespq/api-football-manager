@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
+import User, { Hability } from '../database/entities/User.Entity';
 import { getUserById } from '../services/auth.service';
 import ApiError from '../utils/apiError.utils';
 
@@ -39,6 +40,15 @@ async function isTokenValid(token: string): Promise<any> {
   }
 }
 
+interface InfoTeam {
+  id?: number;
+  name?: string;
+  hability?: Hability;
+  email?: string;
+  users?: User[];
+  description?: string;
+}
+
 export async function auth(req: Request, _res: Response, next: NextFunction) {
   const token = req.headers.authorization as any;
 
@@ -59,10 +69,28 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Usuario não existe.');
   }
 
+  const filterTeam = user.teams?.flatMap((team: InfoTeam) => {
+    const usersForTeam = team.users?.flatMap((player: InfoTeam) => ({
+      id: player.id,
+      name: player.name,
+      hability: player.hability,
+      email: player.email,
+    }));
+
+    const teamFilter = {
+      id: team.id,
+      name: team.name,
+      description: team.description,
+      users: usersForTeam,
+    };
+    return teamFilter;
+  });
+
   const filterUser = {
     id: user.id,
     name: user.name,
     email: user.email,
+    teams: filterTeam,
   };
 
   req.user = filterUser;
