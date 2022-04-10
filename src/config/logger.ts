@@ -20,6 +20,6 @@ export default createLogger({
           format.errors({ stack: true }),
           format.json()
         ),
-  defaultMeta: { service: 'quickstart-service' },
+  defaultMeta: { service: 'football-manager-service' },
   transports: [new transports.Console()],
 });

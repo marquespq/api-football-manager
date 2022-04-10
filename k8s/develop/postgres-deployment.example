@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc-develop
-  namespace: quickstart
+  namespace: football-manager
 spec:
   accessModes:
     - ReadWriteOnce
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-deployment-develop
-  namespace: quickstart
+  namespace: football-manager
 spec:
   selector:
     matchLabels:
@@ -48,7 +48,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: postgres-service-develop
-  namespace: quickstart
+  namespace: football-manager
 spec:
   selector:
     app: postgres-develop

@@ -85,7 +85,6 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "mixpanel": "^0.14.0",
-    "mongoose": "^6.0.13",
     "morgan": "^1.10.0",
     "nanoid": "^3.1.30",
     "pagarme": "^4.20.0",
