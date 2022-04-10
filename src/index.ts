@@ -8,7 +8,6 @@ import config, { environments } from './config/config';
 import logger from './config/logger';
 import database from './config/database';
 import routes from './routes';
-import swaggerDocs from './config/swagger';
 
 const app = express();
 
@@ -28,10 +27,6 @@ app.listen(config.port, async () => {
   await database();
 
   routes(app);
-
-  if (config.env !== environments.PRODUCTION) {
-    swaggerDocs(app, config.publicUrl, config.port);
-  }
 });
 
 export default app;
