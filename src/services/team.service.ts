@@ -5,6 +5,8 @@ import TeamRepository from '../database/repositories/Team.Repository';
 import { InfoTeam } from '../middlewares/auth';
 import { CreateTeamInput, UpdateTeamInput } from '../schemas/team.schema';
 import ApiError from '../utils/apiError.utils';
+import { breakArray } from '../utils/breakArray';
+import { sortTeam } from '../utils/sortTeam';
 
 async function populateUsers(users: (number | undefined)[]) {
   const existingUsers = await getRepository(User).findByIds(users);
@@ -82,7 +84,7 @@ export async function remove(id: number) {
   await repository.delete(id);
 }
 
-export async function getTeamById(id: number) {
+export async function drawTeams(id: number) {
   const query = { where: { id } };
 
   const repository = getCustomRepository(TeamRepository);
@@ -127,9 +129,47 @@ export async function getTeamById(id: number) {
   LEVEL_FOUR.push(professional);
   LEVEL_FIVE.push(legendary);
 
+  const amauterSet = LEVEL_ONE[0] ? sortTeam(LEVEL_ONE[0]) : '';
+  const beginnerSet = LEVEL_TWO[0] ? sortTeam(LEVEL_TWO[0]) : '';
+  const semiProfessionalSet = LEVEL_THREE[0] ? sortTeam(LEVEL_THREE[0]) : '';
+  const professionalSet = LEVEL_FOUR[0] ? sortTeam(LEVEL_FOUR[0]) : '';
+  const legendarySet = LEVEL_FIVE[0] ? sortTeam(LEVEL_FIVE[0]) : '';
+
+  const amauters = amauterSet
+    ? breakArray(amauterSet, amauterSet.length / 2)
+    : '';
+  const begginers = beginnerSet
+    ? breakArray(beginnerSet, beginnerSet.length / 2)
+    : '';
+  const semiProfessionals = semiProfessionalSet
+    ? breakArray(semiProfessionalSet, semiProfessionalSet.length / 2)
+    : '';
+  const professionals = professionalSet
+    ? breakArray(professionalSet, professionalSet.length / 2)
+    : '';
+  const legendarys = legendarySet
+    ? breakArray(legendarySet, legendarySet.length / 2)
+    : '';
+
+  const teamOne = [
+    ...amauters[0],
+    ...begginers[0],
+    ...semiProfessionals[0],
+    ...professionals[0],
+    ...legendarys[0],
+  ];
+
+  const teamTwo = [
+    ...amauters[1],
+    ...begginers[1],
+    ...semiProfessionals[1],
+    ...professionals[1],
+    ...legendarys[1],
+  ];
+
   const teamFilter = {
-    ...team,
-    users: user,
+    teamOne,
+    teamTwo,
   };
 
   return teamFilter;

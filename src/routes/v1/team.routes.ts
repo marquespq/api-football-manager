@@ -3,7 +3,7 @@ import {
   createHandler,
   updateHandler,
   deleteHandler,
-  getByIdHandler,
+  drawTeamsHandler,
 } from '../../controllers/team.controller';
 import { auth } from '../../middlewares/auth';
 import validateResource from '../../middlewares/validateResource';
@@ -36,5 +36,5 @@ routes
     validateResource(deleteTeamSchema),
     catchAsync(deleteHandler)
   )
-  .get(catchAsync(auth), catchAsync(getByIdHandler));
+  .get(catchAsync(auth), catchAsync(drawTeamsHandler));
 export default routes;
