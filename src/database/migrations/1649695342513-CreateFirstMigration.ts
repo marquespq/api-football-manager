@@ -1,13 +1,13 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class CreateFirstMigration1649687873238 implements MigrationInterface {
-    name = 'CreateFirstMigration1649687873238'
+export class CreateFirstMigration1649695342513 implements MigrationInterface {
+    name = 'CreateFirstMigration1649695342513'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "teams" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, "description" text, CONSTRAINT "PK_7e5523774a38b08a6236d322403" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TYPE "public"."users_ability_enum" AS ENUM('amateur', 'beginner', 'semiprofissional', 'professional', 'legendary')`);
+        await queryRunner.query(`CREATE TYPE "public"."users_ability_enum" AS ENUM('amateur', 'beginner', 'semiprofessional', 'professional', 'legendary')`);
         await queryRunner.query(`CREATE TYPE "public"."users_position_enum" AS ENUM('goalkeeper', 'attacker', 'half', 'defender')`);
-        await queryRunner.query(`CREATE TABLE "users" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, "email" character varying NOT NULL, "ability" "public"."users_ability_enum" NOT NULL DEFAULT 'semiprofissional', "position" "public"."users_position_enum" NOT NULL DEFAULT 'defender', "password" character varying, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "users" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, "email" character varying NOT NULL, "ability" "public"."users_ability_enum" NOT NULL DEFAULT 'semiprofessional', "position" "public"."users_position_enum" NOT NULL DEFAULT 'defender', "password" character varying, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "teams_users" ("team_id" integer NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "PK_7ef73da7c71c3028ec52cd3681d" PRIMARY KEY ("team_id", "user_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_29718c15b653166d708c49b357" ON "teams_users" ("team_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_2a578f7a5be3b6bec99bfb8d6a" ON "teams_users" ("user_id") `);

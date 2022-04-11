@@ -5,7 +5,7 @@ import type Team from './Team.Entity';
 export enum Ability {
   AMATEUR = 'amateur',
   BEGINNER = 'beginner',
-  SEMI_PROFESSIONAL = 'semiprofissional',
+  SEMI_PROFESSIONAL = 'semiprofessional',
   PROFESSIONAL = 'professional',
   LEGENDARY = 'legendary',
 }

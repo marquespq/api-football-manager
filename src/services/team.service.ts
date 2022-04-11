@@ -91,6 +91,9 @@ export async function drawTeams(id: number) {
 
   const team = await repository.findOne(query);
 
+  if (!team)
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Não existe esse time');
+
   const user = team?.users?.flatMap((filter: InfoTeam) => ({
     id: filter.id,
     name: filter.name,
@@ -152,20 +155,20 @@ export async function drawTeams(id: number) {
     : '';
 
   const teamOne = [
-    ...amauters[0],
-    ...begginers[0],
-    ...semiProfessionals[0],
-    ...professionals[0],
-    ...legendarys[0],
-  ];
+    amauters[0],
+    begginers[0],
+    semiProfessionals[0],
+    professionals[0],
+    legendarys[0],
+  ].flat();
 
   const teamTwo = [
-    ...amauters[1],
-    ...begginers[1],
-    ...semiProfessionals[1],
-    ...professionals[1],
-    ...legendarys[1],
-  ];
+    amauters[1],
+    begginers[1],
+    semiProfessionals[1],
+    professionals[1],
+    legendarys[1],
+  ].flat();
 
   const teamFilter = {
     teamOne,
