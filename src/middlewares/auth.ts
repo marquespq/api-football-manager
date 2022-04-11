@@ -2,14 +2,14 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
-import User, { Hability, Position } from '../database/entities/User.Entity';
+import User, { Ability, Position } from '../database/entities/User.Entity';
 import { getUserById } from '../services/auth.service';
 import ApiError from '../utils/apiError.utils';
 
-interface InfoTeam {
+export interface InfoTeam {
   id?: number;
   name?: string;
-  hability?: Hability;
+  ability?: Ability;
   position?: Position;
   email?: string;
   users?: User[];
@@ -74,7 +74,7 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
     const usersForTeam = team.users?.flatMap((player: InfoTeam) => ({
       id: player.id,
       name: player.name,
-      hability: player.hability,
+      ability: player.ability,
       position: player.position,
       email: player.email,
     }));

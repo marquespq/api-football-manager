@@ -1,15 +1,15 @@
 import * as yup from 'yup';
-import { Hability, Position } from '../database/entities/User.Entity';
+import { Ability, Position } from '../database/entities/User.Entity';
 
 export const schema = yup.object({
   name: yup.string().defined('Name is required'),
   email: yup.string().defined('email is required'),
-  password: yup.string().defined('password is required'),
-  hability: yup
-    .mixed<Hability>()
+  password: yup.string().nullable(),
+  ability: yup
+    .mixed<Ability>()
     .oneOf(
-      Object.values(Hability),
-      `Nivel deve ser: ${Object.values(Hability).join(' ou ')}.`
+      Object.values(Ability),
+      `Nivel deve ser: ${Object.values(Ability).join(' ou ')}.`
     ),
   position: yup
     .mixed<Position>()

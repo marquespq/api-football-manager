@@ -1,13 +1,13 @@
 import { hash } from 'bcrypt';
 import { getCustomRepository } from 'typeorm';
-import { Hability, Position } from '../database/entities/User.Entity';
+import { Ability, Position } from '../database/entities/User.Entity';
 import UserRepository from '../database/repositories/User.Repository';
 import { CreateUserSchema, UpdateUserSchema } from '../schemas/user.schema';
 
 export async function createUser(
   input: CreateUserSchema['body']
 ): Promise<void> {
-  const { name, email, password, hability, position } = input;
+  const { name, email, password, ability, position } = input;
 
   const repository = getCustomRepository(UserRepository);
 
@@ -15,12 +15,13 @@ export async function createUser(
 
   if (user) throw new Error('Este usuário já existe');
 
-  const passwordHash = await hash(password, 8);
+  let passwordHash;
+  if (password) passwordHash = await hash(password as string, 8);
 
   const newUser = {
     name,
     email,
-    hability: hability as Hability,
+    ability: ability as Ability,
     password: passwordHash,
     position: position as Position,
   };
@@ -29,7 +30,7 @@ export async function createUser(
 }
 
 export async function updateUser(id: number, input: UpdateUserSchema['body']) {
-  const { name, password, hability, email, position } = input;
+  const { name, password, ability, email, position } = input;
 
   const repository = getCustomRepository(UserRepository);
 
@@ -39,13 +40,14 @@ export async function updateUser(id: number, input: UpdateUserSchema['body']) {
     throw new Error('Usuário não encontrado');
   }
 
-  const passwordHash = await hash(password, 8);
+  let passwordHash;
+  if (password) passwordHash = await hash(password as string, 8);
 
   const userToUpdate = {
     id,
     name,
     email,
-    hability: hability as Hability,
+    ability: ability as Ability,
     password: passwordHash,
     position: position as Position,
   };

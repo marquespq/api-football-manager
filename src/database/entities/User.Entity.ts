@@ -2,7 +2,7 @@ import { Entity, Column, ManyToMany } from 'typeorm';
 import Base from './Base.Entity';
 import type Team from './Team.Entity';
 
-export enum Hability {
+export enum Ability {
   AMATEUR = 'amateur',
   BEGINNER = 'beginner',
   SEMI_PROFESSIONAL = 'semiprofissional',
@@ -27,10 +27,10 @@ export default class User extends Base {
 
   @Column({
     type: 'enum',
-    enum: Hability,
-    default: Hability.SEMI_PROFESSIONAL,
+    enum: Ability,
+    default: Ability.SEMI_PROFESSIONAL,
   })
-  hability: Hability;
+  ability: Ability;
 
   @Column({
     type: 'enum',
@@ -39,8 +39,8 @@ export default class User extends Base {
   })
   position: Position;
 
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  password?: string;
 
   @ManyToMany('Team', 'users')
   teams?: Team[];

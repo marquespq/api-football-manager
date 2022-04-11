@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { CreateTeamInput } from '../schemas/team.schema';
-import { createTeam, remove, updateTeam } from '../services/team.service';
+import {
+  createTeam,
+  getTeamById,
+  remove,
+  updateTeam,
+} from '../services/team.service';
 import ApiReturnSuccess from '../utils/apiReturnSuccess';
 
 export async function createHandler(
@@ -22,4 +27,10 @@ export async function deleteHandler(request: Request, response: Response) {
   const { id } = request.params;
   await remove(Number(id));
   response.status(StatusCodes.NO_CONTENT).json(new ApiReturnSuccess());
+}
+
+export async function getByIdHandler(request: Request, response: Response) {
+  const { id } = request.params;
+  const team = await getTeamById(Number(id));
+  response.status(StatusCodes.OK).json(new ApiReturnSuccess(team));
 }
