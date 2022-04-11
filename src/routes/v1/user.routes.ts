@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import {
   createHandler,
+  deleteHandler,
   getCurrentUser,
   updateHandler,
 } from '../../controllers/user.controller';
 
-import { createUserSchema, updateUserSchema } from '../../schemas/user.schema';
+import {
+  createUserSchema,
+  deleteUserSchema,
+  updateUserSchema,
+} from '../../schemas/user.schema';
 
 import validateResource from '../../middlewares/validateResource';
 import { auth } from '../../middlewares/auth';
@@ -14,16 +19,24 @@ import catchAsync from '../../utils/catchAsync';
 const routes = Router();
 
 routes
-  // PUBLIC
   .route('/')
-  .post(validateResource(createUserSchema), catchAsync(createHandler))
-
-  // PRIVATE
+  .post(
+    catchAsync(auth),
+    validateResource(createUserSchema),
+    catchAsync(createHandler)
+  )
   .get(catchAsync(auth), catchAsync(getCurrentUser));
-
-// PUBLIC
 routes
   .route('/:id')
-  .put(validateResource(updateUserSchema), catchAsync(updateHandler));
+  .put(
+    catchAsync(auth),
+    validateResource(updateUserSchema),
+    catchAsync(updateHandler)
+  )
+  .delete(
+    catchAsync(auth),
+    validateResource(deleteUserSchema),
+    catchAsync(deleteHandler)
+  );
 
 export default routes;

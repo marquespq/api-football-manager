@@ -4,6 +4,7 @@ import { CreateTeamInput } from '../schemas/team.schema';
 import {
   createTeam,
   drawTeams,
+  getUsersAvailable,
   remove,
   updateTeam,
 } from '../services/team.service';
@@ -33,4 +34,13 @@ export async function drawTeamsHandler(request: Request, response: Response) {
   const { id } = request.params;
   const team = await drawTeams(Number(id));
   response.status(StatusCodes.OK).json(new ApiReturnSuccess(team));
+}
+
+export async function getUsersByTeamHandler(
+  request: Request,
+  response: Response
+) {
+  const { team } = request;
+  const users = await getUsersAvailable(Number(team.id));
+  response.status(StatusCodes.OK).json(new ApiReturnSuccess(users));
 }

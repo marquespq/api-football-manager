@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
-import User, { Ability, Position } from '../database/entities/User.Entity';
+import { Ability, Position } from '../database/entities/User.Entity';
 import { getUserById } from '../services/auth.service';
 import ApiError from '../utils/apiError.utils';
 
@@ -12,14 +12,14 @@ export interface InfoTeam {
   ability?: Ability;
   position?: Position;
   email?: string;
-  users?: User[];
+  users?: any;
   description?: string;
 }
 
 declare global {
   namespace Express {
     interface Request {
-      user: InfoTeam;
+      team: InfoTeam;
     }
   }
 }
@@ -62,40 +62,22 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
     throw new ApiError(StatusCodes.UNAUTHORIZED, 'Acesso negado');
   }
 
-  let user;
+  let team;
 
   try {
-    user = await getUserById(isValid.sub);
+    team = await getUserById(isValid.sub);
   } catch (error) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Usuario não existe.');
   }
 
-  const filterTeam = user.teams?.flatMap((team: InfoTeam) => {
-    const usersForTeam = team.users?.flatMap((player: InfoTeam) => ({
-      id: player.id,
-      name: player.name,
-      ability: player.ability,
-      position: player.position,
-      email: player.email,
-    }));
-
-    const teamFilter = {
-      id: team.id,
-      name: team.name,
-      description: team.description,
-      users: usersForTeam,
-    };
-    return teamFilter;
-  });
-
-  const filterUser = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    teams: filterTeam,
+  const filterTeam = {
+    id: team.id,
+    name: team.name,
+    email: team.email,
+    users: team.users,
   };
 
-  req.user = filterUser;
+  req.team = filterTeam;
 
   next();
 }

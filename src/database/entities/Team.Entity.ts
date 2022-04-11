@@ -7,6 +7,9 @@ export default class Team extends Base {
   @Column()
   name: string;
 
+  @Column()
+  email: string;
+
   @Column({ type: 'text', nullable: true })
   description?: string;
 
@@ -23,4 +26,7 @@ export default class Team extends Base {
     },
   })
   users?: User[];
+
+  @Column()
+  password: string;
 }

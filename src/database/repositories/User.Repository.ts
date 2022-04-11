@@ -9,4 +9,14 @@ export default class UserRepository extends Repository<User> {
       .getOne();
     return user;
   }
+
+  async findUserByTeamId(id: number): Promise<User[]> {
+    const queryBuilder = this.createQueryBuilder('user').where(
+      'user.team_id = :id',
+      { id }
+    );
+
+    const res = await queryBuilder.getMany();
+    return res;
+  }
 }

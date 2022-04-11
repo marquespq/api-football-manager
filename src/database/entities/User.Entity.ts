@@ -22,9 +22,6 @@ export default class User extends Base {
   @Column()
   name: string;
 
-  @Column()
-  email: string;
-
   @Column({
     type: 'enum',
     enum: Ability,
@@ -39,9 +36,9 @@ export default class User extends Base {
   })
   position: Position;
 
-  @Column({ nullable: true })
-  password?: string;
-
   @ManyToMany('Team', 'users')
   teams?: Team[];
+
+  @Column()
+  team_id: number;
 }

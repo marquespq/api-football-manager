@@ -13,7 +13,7 @@ export async function loginHandler(
 }
 
 export async function getUser(request: Request, response: Response) {
-  const { user } = request;
+  const { team } = request;
 
-  response.status(StatusCodes.OK).json(new ApiReturnSuccess(user));
+  response.status(StatusCodes.OK).json(new ApiReturnSuccess(team));
 }

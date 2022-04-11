@@ -7,6 +7,7 @@ export const teamSchema = yup.object({
     .max(255, 'Nome do time não pode ser maior que 255 caracteres.'),
   description: yup.string(),
   users: yup.array().nullable().of(yup.number().integer()),
+  password: yup.string().defined('password is required'),
 });
 
 const payload = { body: teamSchema };

@@ -3,8 +3,6 @@ import { Ability, Position } from '../database/entities/User.Entity';
 
 export const schema = yup.object({
   name: yup.string().defined('Name is required'),
-  email: yup.string().defined('email is required'),
-  password: yup.string().nullable(),
   ability: yup
     .mixed<Ability>()
     .oneOf(
@@ -17,12 +15,15 @@ export const schema = yup.object({
       Object.values(Position),
       `Posição deve ser: ${Object.values(Position).join(' ou ')}.`
     ),
+  team_id: yup.number(),
 });
 
 const payload = { body: schema };
 const params = { params: yup.object().shape({ id: yup.number() }) };
 export const createUserSchema = yup.object({ body: schema });
 export const updateUserSchema = yup.object({ ...params, ...payload });
+export const deleteUserSchema = yup.object({ ...params });
 
 export type CreateUserSchema = yup.InferType<typeof createUserSchema>;
 export type UpdateUserSchema = yup.InferType<typeof updateUserSchema>;
+export type DeleteUserInput = yup.InferType<typeof deleteUserSchema>;

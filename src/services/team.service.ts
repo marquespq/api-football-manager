@@ -1,7 +1,9 @@
+import { hash } from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import User, { Ability } from '../database/entities/User.Entity';
 import TeamRepository from '../database/repositories/Team.Repository';
+import UserRepository from '../database/repositories/User.Repository';
 import { InfoTeam } from '../middlewares/auth';
 import { CreateTeamInput, UpdateTeamInput } from '../schemas/team.schema';
 import ApiError from '../utils/apiError.utils';
@@ -17,7 +19,7 @@ async function populateUsers(users: (number | undefined)[]) {
 export async function createTeam(
   input: CreateTeamInput['body']
 ): Promise<void> {
-  const { name, users = [] } = input;
+  const { name, password, users = [] } = input;
 
   const repository = getCustomRepository(TeamRepository);
   const teamAlreadyExists = await repository.findOneByName(name);
@@ -26,6 +28,9 @@ export async function createTeam(
     throw new Error('Time já existe.');
   }
 
+  let passwordHash;
+  if (password) passwordHash = await hash(password as string, 8);
+
   let existingUsers;
   if (users && users.length) {
     existingUsers = await populateUsers(users);
@@ -33,6 +38,7 @@ export async function createTeam(
 
   const createdTeam = repository.create({
     ...input,
+    password: passwordHash,
     users: existingUsers,
   });
 
@@ -40,7 +46,7 @@ export async function createTeam(
 }
 
 export async function updateTeam(id: number, input: UpdateTeamInput['body']) {
-  const { users = [], name, description } = input;
+  const { users = [], password, name, description } = input;
 
   const repository = getCustomRepository(TeamRepository);
 
@@ -56,6 +62,9 @@ export async function updateTeam(id: number, input: UpdateTeamInput['body']) {
     throw new Error('Já existe outro time cadastrado com esse nome.');
   }
 
+  let passwordHash;
+  if (password) passwordHash = await hash(password as string, 8);
+
   let existingUsers: User[];
 
   if (users && users.length) {
@@ -69,6 +78,7 @@ export async function updateTeam(id: number, input: UpdateTeamInput['body']) {
     name,
     description,
     users: existingUsers,
+    password: passwordHash,
   };
 
   await repository.save(teamToUpdate);
@@ -176,4 +186,10 @@ export async function drawTeams(id: number) {
   };
 
   return teamFilter;
+}
+
+export async function getUsersAvailable(id: number) {
+  const repository = getCustomRepository(UserRepository);
+  const users = await repository.findUserByTeamId(id);
+  return users;
 }
