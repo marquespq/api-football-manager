@@ -3,16 +3,11 @@ import * as yup from 'yup';
 export const teamSchema = yup.object({
   name: yup
     .string()
-    .required('Nome do time é obrigatório.')
     .max(255, 'Nome do time não pode ser maior que 255 caracteres.'),
   description: yup.string(),
-  email: yup
-    .string()
-    .email()
-    .typeError('Email deve ser texto.')
-    .required('Email não pode ser vazio.'),
+  email: yup.string().email().typeError('Email deve ser texto.'),
   users: yup.array().nullable().of(yup.number().integer()),
-  password: yup.string().defined('password is required'),
+  password: yup.string(),
 });
 
 const payload = { body: teamSchema };

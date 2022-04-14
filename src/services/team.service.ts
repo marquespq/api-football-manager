@@ -1,7 +1,7 @@
 import { hash } from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
-import User, { Ability } from '../database/entities/User.Entity';
+import User, { Ability, Position } from '../database/entities/User.Entity';
 import TeamRepository from '../database/repositories/Team.Repository';
 import UserRepository from '../database/repositories/User.Repository';
 import { InfoTeam } from '../middlewares/auth';
@@ -108,6 +108,7 @@ export async function drawTeams(id: number) {
     id: filter.id,
     name: filter.name,
     ability: filter.ability,
+    position: filter.position,
   }));
 
   const LEVEL_ONE = [];
@@ -115,38 +116,59 @@ export async function drawTeams(id: number) {
   const LEVEL_THREE = [];
   const LEVEL_FOUR = [];
   const LEVEL_FIVE = [];
+  const GKS = [];
 
   const amateur = user
-    ?.filter((level) => level.ability === Ability.AMATEUR)
+    ?.filter(
+      (level) =>
+        level.ability === Ability.AMATEUR && level.position !== Position.GK
+    )
     .flat();
 
   const beginner = user
-    ?.filter((level) => level.ability === Ability.BEGINNER)
+    ?.filter(
+      (level) =>
+        level.ability === Ability.BEGINNER && level.position !== Position.GK
+    )
     .flat();
 
   const semiProfessional = user
-    ?.filter((level) => level.ability === Ability.SEMI_PROFESSIONAL)
+    ?.filter(
+      (level) =>
+        level.ability === Ability.SEMI_PROFESSIONAL &&
+        level.position !== Position.GK
+    )
     .flat();
 
   const professional = user
-    ?.filter((level) => level.ability === Ability.PROFESSIONAL)
+    ?.filter(
+      (level) =>
+        level.ability === Ability.PROFESSIONAL && level.position !== Position.GK
+    )
     .flat();
 
   const legendary = user
-    ?.filter((level) => level.ability === Ability.LEGENDARY)
+    ?.filter(
+      (level) =>
+        level.ability === Ability.LEGENDARY && level.position !== Position.GK
+    )
     .flat();
+
+  const gk = user?.filter((gks) => gks.position === Position.GK).flat();
 
   LEVEL_ONE.push(amateur);
   LEVEL_TWO.push(beginner);
   LEVEL_THREE.push(semiProfessional);
   LEVEL_FOUR.push(professional);
   LEVEL_FIVE.push(legendary);
+  GKS.push(gk);
 
   const amauterSet = LEVEL_ONE[0] ? sortTeam(LEVEL_ONE[0]) : '';
   const beginnerSet = LEVEL_TWO[0] ? sortTeam(LEVEL_TWO[0]) : '';
   const semiProfessionalSet = LEVEL_THREE[0] ? sortTeam(LEVEL_THREE[0]) : '';
   const professionalSet = LEVEL_FOUR[0] ? sortTeam(LEVEL_FOUR[0]) : '';
   const legendarySet = LEVEL_FIVE[0] ? sortTeam(LEVEL_FIVE[0]) : '';
+  const gksSet = GKS[0] ? sortTeam(GKS[0]) : '';
 
   const amauters = amauterSet
     ? breakArray(amauterSet, amauterSet.length / 2)
@@ -163,22 +185,29 @@ export async function drawTeams(id: number) {
   const legendarys = legendarySet
     ? breakArray(legendarySet, legendarySet.length / 2)
     : '';
+  const gks = gksSet ? breakArray(gksSet, gksSet.length / 2) : '';
 
   const teamOne = [
+    gks[0],
     amauters[0],
     begginers[0],
     semiProfessionals[0],
     professionals[0],
     legendarys[0],
-  ].flat();
+  ]
+    .filter((f) => f !== undefined)
+    .flat();
 
   const teamTwo = [
+    gks[0],
     amauters[1],
     begginers[1],
     semiProfessionals[1],
     professionals[1],
     legendarys[1],
-  ].flat();
+  ]
+    .filter((f) => f !== undefined)
+    .flat();
 
   const teamFilter = {
     teamOne,

@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateFirstMigration1649698750719 implements MigrationInterface {
-  name = 'CreateFirstMigration1649698750719';
+export class FirstMigration1649940443661 implements MigrationInterface {
+  name = 'FirstMigration1649940443661';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,10 +11,10 @@ export class CreateFirstMigration1649698750719 implements MigrationInterface {
       `CREATE TYPE "public"."users_ability_enum" AS ENUM('amateur', 'beginner', 'semiprofessional', 'professional', 'legendary')`
     );
     await queryRunner.query(
-      `CREATE TYPE "public"."users_position_enum" AS ENUM('goalkeeper', 'attacker', 'half', 'defender')`
+      `CREATE TYPE "public"."users_position_enum" AS ENUM('goleiro', 'linha')`
     );
     await queryRunner.query(
-      `CREATE TABLE "users" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, "ability" "public"."users_ability_enum" NOT NULL DEFAULT 'semiprofessional', "position" "public"."users_position_enum" NOT NULL DEFAULT 'defender', "team_id" integer NOT NULL, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`
+      `CREATE TABLE "users" ("id" SERIAL NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, "ability" "public"."users_ability_enum" NOT NULL DEFAULT 'semiprofessional', "position" "public"."users_position_enum" NOT NULL DEFAULT 'linha', "team_id" integer NOT NULL, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "teams_users" ("team_id" integer NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "PK_7ef73da7c71c3028ec52cd3681d" PRIMARY KEY ("team_id", "user_id"))`

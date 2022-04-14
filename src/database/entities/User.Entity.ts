@@ -11,10 +11,8 @@ export enum Ability {
 }
 
 export enum Position {
-  GK = 'goalkeeper',
-  CA = 'attacker',
-  ME = 'half',
-  DEFENDER = 'defender',
+  GK = 'goleiro',
+  LINE = 'linha',
 }
 
 @Entity('users')
@@ -32,7 +30,7 @@ export default class User extends Base {
   @Column({
     type: 'enum',
     enum: Position,
-    default: Position.DEFENDER,
+    default: Position.LINE,
   })
   position: Position;
 
