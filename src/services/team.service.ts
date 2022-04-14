@@ -199,7 +199,7 @@ export async function drawTeams(id: number) {
     .flat();
 
   const teamTwo = [
-    gks[0],
+    gks[1],
     amauters[1],
     begginers[1],
     semiProfessionals[1],
