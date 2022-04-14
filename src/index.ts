@@ -22,7 +22,7 @@ if (config.env !== environments.PRODUCTION) {
   app.use(morgan('tiny'));
 }
 
-app.listen(config.port || 3001, async () => {
+app.listen(process.env.PORT || config.port || 3001, async () => {
   logger.info(`API rodando em http://${config.publicUrl}:${config.port}`);
 
   await database();
