@@ -7,6 +7,7 @@ const options: Options = {
   type: 'postgres',
   host: config.postgresDb.host,
   port: config.postgresDb.port,
+  ssl: { rejectUnauthorized: false },
   username: config.postgresDb.username,
   password: config.postgresDb.password,
   database: config.postgresDb.database,
